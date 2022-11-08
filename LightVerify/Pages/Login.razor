@@ -1,0 +1,50 @@
+﻿
+@using LightVerify.Models
+
+
+<h3>Login</h3>
+
+<EditForm Model="@loginModel" OnInvalidSubmit="Submit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label>Username</label>
+        <input type="text" @bind-value="loginModel.UserName" class="form-control" placeholder="Enter your username" />
+        <ValidationMessage For="@(() => loginModel.UserName)" />
+    </div>
+
+    <div class="form-group">
+        <label>Phone number</label>
+        <input type="text" @bind-value="loginModel.PhoneNumber" class="form-control" placeholder="Enter the phone number you placed in the device" />
+        <ValidationMessage For="@(() => loginModel.PhoneNumber)" />
+    </div>
+
+    <div class="mt-2 text-end">
+        <NavLink class="nav-link" href="/registration">
+            <span>Click here to create a new account</span>
+        </NavLink>
+    </div>
+
+    <div class="text-center mt-2">
+        <p>
+            <br />
+            <button class="btn btn-primary" type="submit">
+                <span class="@_spinnerClass" role="status" aria-hidden="true"></span>
+                Sign in
+            </button>
+        </p>
+    </div>
+</EditForm>
+
+@code {
+    LoginModel loginModel = new();
+
+    string _spinnerClass = " ";
+
+    public async void Submit()
+    {
+        _spinnerClass = "spinner-border spinner-border-sm";
+        await Task.Delay(500);
+        _spinnerClass = "";
+        this.StateHasChanged();
+    }
+}

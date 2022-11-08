@@ -1,0 +1,39 @@
+﻿@page "/"
+@using LightVerify.Data
+@using Newtonsoft.Json
+
+<h1>Hello, world!</h1>
+
+Welcome to LightVerify the app that hepls you to check
+if there is electricity in your home when you are not there. Press the button below to verify !
+
+<div class="text-center tm-2">
+
+    <p><button class="btn btn-primary" @onclick="Verify">Check</button></p>
+    <p text-align = center>@actualStatus</p>
+</div>
+
+@code {
+    private string actualStatus;
+    private string[] result;
+
+    private void Verify()
+    {
+        //DateTime time = DateTime.Now.TimeOfDay();
+        actualStatus = result[2];
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        var PreviousChecksAnswer = new PreviousChecksModel();
+        var json = await PreviousChecksAnswer.GetPreviousChecks();
+
+        Answer answer = JsonConvert.DeserializeObject<Answer>(json);
+
+        result[0] = answer.Date;
+        result[1] = answer.Time;
+        result[2] = answer.Status;
+    }
+}
+

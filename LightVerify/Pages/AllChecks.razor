@@ -1,0 +1,53 @@
+﻿@page "/allStatus"
+
+@using Newtonsoft.Json
+@using LightVerify.Data
+@using System.Text.Json.Nodes
+@*@inject PreviousChecksModel PreviousChecksAnswer*@
+
+
+<h1>All reported status</h1>
+
+<p>This component showes all status recieved from the Arduino board.</p>
+
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>Date</th>
+			<th>Time</th>
+			<th>Status</th>
+		</tr>
+	</thead>
+	<tbody>
+
+		@foreach (var item in @result)
+		{
+			<tr>
+				<td>@item.Date</td>
+				<td>@item.Time</td>
+				<td>@item.Status</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+
+@code {
+	private List<Answer> result = new List<Answer>();
+
+	protected override async Task OnInitializedAsync()
+	{
+		await base.OnInitializedAsync();
+		var PreviousChecksAnswer = new PreviousChecksModel();
+		var json = await PreviousChecksAnswer.GetPreviousChecks();
+
+		List<Answer> answer = JsonConvert.DeserializeObject<List<Answer>>(json);
+
+		foreach (var item in answer)
+		{
+			result.Add(item);
+		}
+	}
+}
+
